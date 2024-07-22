@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Category{% endblock %}
+
+
+{% block stylesheet %}{% endblock %}
+
+
+
+{% block body %}
+
+
+{% include "/includes/body1.html.twig" %}
+
+
+
+
+<!-- Title -->
+Category
+
+
+
+
+{% include "/includes/body2.html.twig" %}
+
+
+
+
+
+
+<!-- Content -->
+{% include "category/_submenu.html.twig" %}
+
+{{ include('category/_form.html.twig') }}
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% include "/includes/body3.html.twig" %}
+
+
+
+{% endblock %}
