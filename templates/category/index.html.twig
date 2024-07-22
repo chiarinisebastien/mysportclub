@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Category{% endblock %}
+
+
+{% block stylesheet %}{% endblock %}
+
+
+
+{% block body %}
+
+
+{% include "/includes/body1.html.twig" %}
+
+
+
+
+<!-- Title -->
+Category
+
+
+
+
+{% include "/includes/body2.html.twig" %}
+
+
+
+
+
+
+<!-- Content -->
+{% include "category/_submenu.html.twig" %}
+
+
+{% set i = 0 %}
+{% for category in categories %}
+    {% if i == 0 %}
+        <div class="row rowfor">
+    {% endif %}
+            <a class="col-lg-1 colfor" href="{{ path('app_category_edit', {'id':category.id}) }}">
+                {{ category.title }}
+            </a>
+        {% set i = i + 1 %}
+    
+    {% if i == 12 %}
+    </div>
+    {% endif %}
+{% endfor %}
+
+
+{% if i != 12 %}
+    </div>
+{% endif %}
+
+
+
+
+
+
+
+
+
+
+{% include "/includes/body3.html.twig" %}
+
+
+
+{% endblock %}
