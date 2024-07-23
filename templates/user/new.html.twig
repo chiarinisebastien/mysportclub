@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Category{% endblock %}
+{% block title %}User{% endblock %}
 
 
 {% block stylesheet %}{% endblock %}
@@ -16,7 +16,7 @@
 
 
 <!-- Title -->
-Category
+User
 
 
 
@@ -29,13 +29,11 @@ Category
 
 
 <!-- Content -->
-{% include "category/_submenu.html.twig" %}
+{% include "user/_submenu.html.twig" %}
 
-{{ include('category/_form.html.twig') }}
+{{ include('user/_form.html.twig') }}
 
-<div class="row">
-{{ include('category/_delete_form.html.twig') }}
-</div>
+
 
 
 

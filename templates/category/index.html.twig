@@ -32,25 +32,13 @@ Category
 {% include "category/_submenu.html.twig" %}
 
 
-{% set i = 0 %}
+<div class="row rowfor">
 {% for category in categories %}
-    {% if i == 0 %}
-        <div class="row rowfor">
-    {% endif %}
-            <a class="col-lg-1 colfor" href="{{ path('app_category_edit', {'id':category.id}) }}">
-                {{ category.title }}
-            </a>
-        {% set i = i + 1 %}
-    
-    {% if i == 12 %}
-    </div>
-    {% endif %}
+    <a class="col-lg-1 colfor text-center" href="{{ path('app_category_edit', {'id':category.id}) }}">
+        {{ category.title }}
+    </a>
 {% endfor %}
-
-
-{% if i != 12 %}
-    </div>
-{% endif %}
+</div>
 
 
 
