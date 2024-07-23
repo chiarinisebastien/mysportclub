@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User{% endblock %}
+
+
+{% block stylesheet %}{% endblock %}
+
+
+
+{% block body %}
+
+
+{% include "/includes/body1.html.twig" %}
+
+
+
+
+<!-- Title -->
+User
+
+
+
+
+{% include "/includes/body2.html.twig" %}
+
+
+
+
+
+
+<!-- Content -->
+{% include "user/_submenu.html.twig" %}
+
+{% for label, messages in app.flashes(['success', 'warning', 'error']) %}
+    {% for message in messages %}
+        <div class="alert alert-{{ label }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
+
+<div class="row rowfor">
+{% for item in users %}
+    <a class="col-lg-3 col-sm-12 colfor text-start" href="{{ path('app_user_edit', {'id':item.id}) }}">
+        {{ item.email }}
+        <ul>
+           {% for role in item.roles %}
+                <li>{{ role }}</li>
+           {% endfor %}
+        </ul>
+    </a>
+{% endfor %}
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+{% include "/includes/body3.html.twig" %}
+
+
+
+{% endblock %}
