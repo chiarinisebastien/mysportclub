@@ -2,55 +2,53 @@
 
 {% block title %}Category{% endblock %}
 
-
 {% block stylesheet %}{% endblock %}
-
-
 
 {% block body %}
 
-
 {% include "/includes/body1.html.twig" %}
-
-
-
 
 <!-- Title -->
 Category
 
-
-
-
 {% include "/includes/body2.html.twig" %}
-
-
-
-
-
 
 <!-- Content -->
 {% include "category/_submenu.html.twig" %}
 
 
-<div class="row rowfor">
+<div class="row rowfor" id="category-list">
 {% for category in categories %}
-    <a class="col-lg-1 colfor text-center" href="{{ path('app_category_edit', {'id':category.id}) }}">
+    <a class="col-lg-1 colfor text-center category-item" href="{{ path('app_category_edit', {'id':category.id}) }}">
         {{ category.title }}
     </a>
 {% endfor %}
 </div>
 
-
-
-
-
-
-
-
-
-
 {% include "/includes/body3.html.twig" %}
 
+{% endblock %}
 
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('search');
+    const categoryList = document.getElementById('category-list');
+    const categoryItems = document.querySelectorAll('.category-item');
 
+    searchInput.addEventListener('keyup', function () {
+        const searchTerm = searchInput.value.toLowerCase();
+
+        categoryItems.forEach(function (item) {
+            const title = item.textContent.toLowerCase();
+
+            if (title.includes(searchTerm)) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
 {% endblock %}

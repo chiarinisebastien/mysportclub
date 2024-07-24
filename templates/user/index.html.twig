@@ -2,31 +2,16 @@
 
 {% block title %}User{% endblock %}
 
-
 {% block stylesheet %}{% endblock %}
-
-
 
 {% block body %}
 
-
 {% include "/includes/body1.html.twig" %}
-
-
-
 
 <!-- Title -->
 User
 
-
-
-
 {% include "/includes/body2.html.twig" %}
-
-
-
-
-
 
 <!-- Content -->
 {% include "user/_submenu.html.twig" %}
@@ -39,9 +24,11 @@ User
     {% endfor %}
 {% endfor %}
 
-<div class="row rowfor">
+
+
+<div class="row rowfor" id="user-list">
 {% for item in users %}
-    <a class="col-lg-3 col-sm-12 colfor text-start" href="{{ path('app_user_edit', {'id':item.id}) }}">
+    <a class="col-lg-3 col-sm-12 colfor text-start user-item" href="{{ path('app_user_edit', {'id':item.id}) }}">
         {{ item.email }}
         <ul>
            {% for role in item.roles %}
@@ -52,19 +39,32 @@ User
 {% endfor %}
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
 {% include "/includes/body3.html.twig" %}
 
+{% endblock %}
 
 
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('search');
+    const userList = document.getElementById('user-list');
+    const userItems = document.querySelectorAll('.user-item');
+
+    searchInput.addEventListener('keyup', function () {
+        const searchTerm = searchInput.value.toLowerCase();
+
+        userItems.forEach(function (item) {
+            const email = item.textContent.toLowerCase();
+            const roles = Array.from(item.querySelectorAll('li')).map(role => role.textContent.toLowerCase());
+
+            if (email.includes(searchTerm) || roles.some(role => role.includes(searchTerm))) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
 {% endblock %}
