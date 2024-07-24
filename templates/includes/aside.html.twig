@@ -19,13 +19,14 @@
         </li>
 
         {% if app.user %}
+
           {% if 'ROLE_ADMIN' in app.user.roles %}        
           <li class="nav-item">
             <a class="nav-link text-white " href="{{ path('app_user_index') }}">
               <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                 <i class="fa-solid fa-users"></i>
               </div>
-              <span class="nav-link-text ms-1 mt-1">User</span>
+              <span class="nav-link-text ms-1 mt-1">Users</span>
             </a>
           </li>
           <li class="nav-item">
@@ -33,7 +34,19 @@
               <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                 <i class="fa-solid fa-table-list"></i>
               </div>
-              <span class="nav-link-text ms-1 mt-1">Category</span>
+              <span class="nav-link-text ms-1 mt-1">Categories</span>
+            </a>
+          </li>
+          {% endif %}  
+
+
+          {% if 'ROLE_COACH' in app.user.roles %}        
+          <li class="nav-item">
+            <a class="nav-link text-white " href="{{ path('app_player_index') }}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="fa-solid fa-people-group"></i>
+              </div>
+              <span class="nav-link-text ms-1 mt-1">Players</span>
             </a>
           </li>
           {% endif %}

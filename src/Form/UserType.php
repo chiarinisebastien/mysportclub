@@ -54,6 +54,7 @@ class UserType extends AbstractType
             $builder->add('roles', ChoiceType::class, [
                 'choices' => [
                     'User' => 'ROLE_USER',
+                    'Coach' => 'ROLE_COACH',
                     'Administrator' => 'ROLE_ADMIN',
                     'Super Admin' => 'ROLE_SUPER_ADMIN'
                 ],
@@ -65,6 +66,7 @@ class UserType extends AbstractType
             $builder->add('roles', ChoiceType::class, [
                 'choices' => [
                     'User' => 'ROLE_USER',
+                    'Coach' => 'ROLE_COACH',
                     'Administrator' => 'ROLE_ADMIN',
                 ],
                 'expanded' => true,

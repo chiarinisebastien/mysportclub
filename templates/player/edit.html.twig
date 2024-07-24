@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Players{% endblock %}
+
+
+{% block stylesheet %}{% endblock %}
+
+
+
+{% block body %}
+
+
+{% include "/includes/body1.html.twig" %}
+
+
+
+
+<!-- Title -->
+Players
+
+
+
+
+{% include "/includes/body2.html.twig" %}
+
+
+
+
+
+
+<!-- Content -->
+{% include "player/_submenu.html.twig" %}
+
+{{ include('player/_form.html.twig') }}
+
+<div class="row">
+{{ include('player/_delete_form.html.twig') }}
+</div>
+
+
+
+
+
+
+
+
+
+
+
+{% include "/includes/body3.html.twig" %}
+
+
+
+{% endblock %}

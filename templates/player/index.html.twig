@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Players{% endblock %}
+
+{% block stylesheet %}{% endblock %}
+
+{% block body %}
+
+{% include "/includes/body1.html.twig" %}
+
+<!-- Title -->
+Players
+
+{% include "/includes/body2.html.twig" %}
+
+<!-- Content -->
+{% include "player/_submenu.html.twig" %}
+
+{% for label, messages in app.flashes(['success', 'warning', 'error']) %}
+    {% for message in messages %}
+        <div class="alert alert-{{ label }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
+
+
+
+<div class="row rowfor" id="item-list">
+{% for item in players %}
+    <a class="col-lg-3 col-sm-12 colfor text-start list-item" href="{{ path('app_player_edit', {'id':item.id}) }}">
+        {{ item.firstname }} {{ item.lastname }} 
+    </a>
+{% endfor %}
+</div>
+
+{% include "/includes/body3.html.twig" %}
+
+{% endblock %}
+
+
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('search');
+    const itemList = document.getElementById('item-list');
+    const listItems = document.querySelectorAll('.list-item');
+
+    searchInput.addEventListener('keyup', function () {
+        const searchTerm = searchInput.value.toLowerCase();
+
+        listItems.forEach(function (item) {
+            const content = item.textContent.toLowerCase();
+
+            if (content.includes(searchTerm)) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
