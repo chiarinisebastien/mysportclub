@@ -1,4 +1,6 @@
 
+{% set currentPath = app.request.pathinfo %}
+
     <div class="nav-wrapper">
         <ul class="nav-menu">
             <li>
@@ -16,4 +18,14 @@
         </ul>
     </div>
 
-<br><br>
+    
+    {% if 'new' not in currentPath and 'edit' not in currentPath %} 
+    <!-- Search input -->
+    <div class="row">
+        <div class="search-container col-lg-3 ms-2">
+            <input class="form-control" type="text" id="search" placeholder="Search User...">
+        </div>
+    </div>
+    {% else %}
+    <br><br>
+    {% endif %}

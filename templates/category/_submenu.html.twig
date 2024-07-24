@@ -1,5 +1,8 @@
 
-    <div class="nav-wrapper">
+    
+{% set currentPath = app.request.pathinfo %}
+
+<div class="nav-wrapper">
         <ul class="nav-menu">
             <li>
                 <a href="{{ path('app_category_index') }}">
@@ -16,4 +19,13 @@
         </ul>
     </div>
 
-<br><br>
+    {% if 'new' not in currentPath and 'edit' not in currentPath %} 
+    <!-- Search input -->
+    <div class="row">
+        <div class="search-container col-lg-3 ms-2">
+            <input class="form-control" type="text" id="search" placeholder="Search Category...">
+        </div>
+    </div>
+    {% else %}
+    <br><br>
+    {% endif %}
