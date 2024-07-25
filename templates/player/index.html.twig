@@ -18,6 +18,7 @@ Players
 
 {% for label, messages in app.flashes(['success', 'warning', 'error']) %}
     {% for message in messages %}
+    <br><br>
         <div class="alert alert-{{ label }}">
             {{ message }}
         </div>
@@ -30,6 +31,12 @@ Players
 {% for item in players %}
     <a class="col-lg-3 col-sm-12 colfor text-start list-item" href="{{ path('app_player_edit', {'id':item.id}) }}">
         {{ item.firstname }} {{ item.lastname }} 
+
+        <ul>
+            {% for category in item.category %}
+                <li>{{ category.title }}</li>
+            {% endfor %}
+        </ul>
     </a>
 {% endfor %}
 </div>

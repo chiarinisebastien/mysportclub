@@ -31,12 +31,29 @@ Category
 <!-- Content -->
 {% include "category/_submenu.html.twig" %}
 
+<div class="row">
+<div class="col-lg-6 col-sm-12 col-md-12">
+
 {{ include('category/_form.html.twig') }}
 
 <div class="row">
 {{ include('category/_delete_form.html.twig') }}
 </div>
 
+</div>
+<div class="col-lg-6 col-sm-12 col-md-12 p-4">
+    {% if category.players %}
+    {% for player in category.players %}    
+    <div class="row rowfor" id="item-list">
+        <a class="col-lg-6 col-sm-12 colfor text-start list-item" href="{{ path('app_player_edit', {'id':player.id}) }}">
+            {{ player.firstname }} {{ player.lastname }} 
+        </a>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+</div>
+</div>
 
 
 

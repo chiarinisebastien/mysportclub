@@ -33,6 +33,11 @@ class PlayerController extends AbstractController
             $entityManager->persist($player);
             $entityManager->flush();
 
+            $this->addFlash(
+                'success',
+                'Player added successfully'
+            );
+
             return $this->redirectToRoute('app_player_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -61,6 +66,11 @@ class PlayerController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
+            $this->addFlash(
+                'success',
+                'Player edited successfully'
+            );
+
             return $this->redirectToRoute('app_player_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -77,6 +87,25 @@ class PlayerController extends AbstractController
             $entityManager->remove($player);
             $entityManager->flush();
         }
+
+        return $this->redirectToRoute('app_player_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/delete/all/player', name: 'app_player_delete_all_player', methods: ['POST', 'GET'])]
+    public function app_player_delete_all_player(
+        EntityManagerInterface $entityManager,
+        PlayerRepository $playerRepository
+        ): Response
+    {
+        $players = $playerRepository->findAll();
+
+        foreach ($players as $player) {
+            foreach ($player->getCategory() as $category) {
+                $player->removeCategory($category);
+            }
+            $entityManager->remove($player);
+        }
+        $entityManager->flush();
 
         return $this->redirectToRoute('app_player_index', [], Response::HTTP_SEE_OTHER);
     }

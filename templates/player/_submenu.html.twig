@@ -15,14 +15,22 @@
                     <span class="nav-link-text">New</span>
                 </a>
             </li>
+            {% if 'ROLE_SUPER_ADMIN' in app.user.roles %}
+            <li>
+                <a href="{{ path('app_player_delete_all_player') }}">
+                    <i class="fa-solid fa-trash-can"></i>
+                    <span class="nav-link-text">Del. All</span>
+                </a>
+            </li>
+            {% endif %}
         </ul>
     </div>
 
     
     {% if 'new' not in currentPath and 'edit' not in currentPath %} 
     <!-- Search input -->
-    <div class="row">
-        <div class="search-container col-lg-3 ms-2">
+    <div class="row clear-sm">
+        <div class="search-container col-lg-3 ms-2 col-sm-12 col-md-12">
             <input class="form-control" type="text" id="search" placeholder="Search Player...">
         </div>
     </div>
