@@ -6,22 +6,35 @@
 
 {% block body %}
 
-
-<!-- Title -->
-Category
+<h1>Category</h1>
 
 
-<!-- Content -->
+
 {% include "category/_submenu.html.twig" %}
 
 
-<div class="row rowfor" id="category-list">
-{% for category in categories %}
-    <a class="col-lg-1 colfor text-center category-item" href="{{ path('app_category_edit', {'id':category.id}) }}">
-        {{ category.title }}
-    </a>
-{% endfor %}
-</div>
+<div class="row mt-3 ms-2" id="category-list">
+    {% for item in categories %}
+    <div class="card col-lg-2 m-1 p-0 col-sm-12 col-md-6 category-item">
+        <div class="card-header">{{ item.title }}</div>
+        <div class="card-body">
+            <ul>
+                {% for player in item.players %}
+                     <li>{{ player.firstname }} {{ player.lastname }}</li>
+                {% endfor %}
+             </ul>
+        </div>
+        <div class="cardLink text-end">
+            {% if 'ROLE_ADMIN' in app.user.roles %}
+                <a class="btn btn-sm btn-info col-lg-5 col-sm-12 col-md-12 m-1" href="{{ path('app_category_edit', {'id':item.id}) }}">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    Edit
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+    </div>
 
 
 {% endblock %}

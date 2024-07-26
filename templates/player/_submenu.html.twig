@@ -25,7 +25,7 @@
             <li>
                 <a href="{{ path('app_player_generate') }}">
                     <i class="fa-solid fa-person-circle-plus"></i>
-                    <span class="nav-link-text">Generate</span>
+                    <span class="nav-link-text">Gen.</span>
                 </a>
             </li>
             {% endif %}
@@ -34,12 +34,10 @@
 
     
     {% if 'new' not in currentPath and 'edit' not in currentPath %} 
-    <!-- Search input -->
-    <div class="row clear-sm">
-        <div class="search-container col-lg-3 ms-2 col-sm-12 col-md-12">
+    <div class="row">
+        <div class="search-container col-lg-3 col-sm-12 col-md-12">
             <input class="form-control" type="text" id="search" placeholder="Search Player...">
         </div>
     </div>
     {% else %}
-    <br><br>
     {% endif %}

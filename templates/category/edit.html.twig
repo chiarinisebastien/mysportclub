@@ -13,20 +13,8 @@
 
 
 
+<h1>Category</h1>
 
-<!-- Title -->
-Category
-
-
-
-
-
-
-
-
-
-
-<!-- Content -->
 {% include "category/_submenu.html.twig" %}
 
 <div class="row">
@@ -39,11 +27,11 @@ Category
 </div>
 
 </div>
-<div class="col-lg-6 col-sm-12 col-md-12 p-4">
+<div class="col-lg-6 col-sm-12 col-md-12 p-4 mt-2">
     {% if category.players %}
     {% for player in category.players %}    
-    <div class="row rowfor" id="item-list">
-        <a class="col-lg-6 col-sm-12 colfor text-start list-item" href="{{ path('app_player_edit', {'id':player.id}) }}">
+    <div class="row" id="item-list">
+        <a class="btn btn-sm btn-info col-lg-3 col-sm-12 colfor text-start list-item m-1 p-2" href="{{ path('app_player_edit', {'id':player.id}) }}">
             {{ player.firstname }} {{ player.lastname }} 
         </a>
     </div>

@@ -6,36 +6,40 @@
 
 {% block body %}
 
+<h1>Players</h1>
 
-<!-- Title -->
-Players
-
-
-<!-- Content -->
-{% include "player/_submenu.html.twig" %}
 
 {% for label, messages in app.flashes(['success', 'warning', 'error']) %}
-    {% for message in messages %}
-    <br><br>
-        <div class="alert alert-{{ label }}">
-            {{ message }}
-        </div>
-    {% endfor %}
+{% for message in messages %}
+<div class="alert alert-{{ label }}">
+    {{ message }}
+</div>
+{% endfor %}
 {% endfor %}
 
 
+{% include "player/_submenu.html.twig" %}
 
-<div class="row rowfor" id="item-list">
+<div class="row mt-3 ms-2" id="item-list">
 {% for item in players %}
-    <a class="col-lg-3 col-sm-12 colfor text-start list-item" href="{{ path('app_player_edit', {'id':item.id}) }}">
-        {{ item.firstname }} {{ item.lastname }} 
-
+<div class="card col-lg-2 m-1 p-0 col-sm-12 col-md-6 list-item">
+    <div class="card-header">{{ item.firstname }} {{ item.lastname }}</div>
+    <div class="card-body">
         <ul>
-            {% for category in item.category %}
-                <li>{{ category.title }}</li>
+            {% for team in item.category %}
+                 <li>{{ team.title }}</li>
             {% endfor %}
-        </ul>
-    </a>
+         </ul>
+    </div>
+    <div class="cardLink text-end">
+        {% if 'ROLE_ADMIN' in app.user.roles %}
+            <a class="btn btn-sm btn-info col-lg-5 col-sm-12 col-md-12 m-1" href="{{ path('app_player_edit', {'id':item.id}) }}">
+                <i class="fa-solid fa-user-pen"></i>
+                Edit
+            </a>
+        {% endif %}
+    </div>
+</div>
 {% endfor %}
 </div>
 
