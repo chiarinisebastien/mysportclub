@@ -18,6 +18,7 @@ User
 
 {% for label, messages in app.flashes(['success', 'warning', 'error']) %}
     {% for message in messages %}
+    <br><br>
         <div class="alert alert-{{ label }}">
             {{ message }}
         </div>

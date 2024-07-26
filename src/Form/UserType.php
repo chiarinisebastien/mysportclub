@@ -55,6 +55,8 @@ class UserType extends AbstractType
                 'choices' => [
                     'User' => 'ROLE_USER',
                     'Coach' => 'ROLE_COACH',
+                    'Player' => 'ROLE_PLAYER',
+                    'Parent' => 'ROLE_PARENT',
                     'Administrator' => 'ROLE_ADMIN',
                     'Super Admin' => 'ROLE_SUPER_ADMIN'
                 ],
@@ -67,6 +69,8 @@ class UserType extends AbstractType
                 'choices' => [
                     'User' => 'ROLE_USER',
                     'Coach' => 'ROLE_COACH',
+                    'Player' => 'ROLE_PLAYER',
+                    'Parent' => 'ROLE_PARENT',
                     'Administrator' => 'ROLE_ADMIN',
                 ],
                 'expanded' => true,

@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Player;
+use App\Repository\CategoryRepository;
+use Faker\Factory;
 use App\Form\PlayerType;
 use App\Repository\PlayerRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -105,6 +107,52 @@ class PlayerController extends AbstractController
             }
             $entityManager->remove($player);
         }
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_player_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/player/generate', name: 'app_player_generate', methods: ['GET'])]
+    public function generate(
+            PlayerRepository $playersRepository
+            , EntityManagerInterface $entityManager
+            , CategoryRepository $categoryRepository
+        ): Response
+    {
+        
+        $categoryCount = $categoryRepository->count([]);
+
+        for ($i = 0 ; $i < 300 ; $i++) {
+            $player = new Player();
+            $faker = Factory::create('fr_FR');
+            $firstname = $faker->firstname();
+            $lastname = $faker->lastName();
+            $categoryId = rand(1, $categoryCount);
+
+            $category = $categoryRepository->findOneBy(['id'=>$categoryId]); 
+
+            if ($category === null) {
+                error_log("Group with ID $categoryId not found.");
+            } else {
+                error_log("Found group: " . $category->getTitle());
+                $title = $category->getTitle();
+                preg_match('/\d+/', $title, $matches);
+                $age = $matches[0];
+                $rangeMin = $age - 1;
+                $rangeMax = $age + 1;
+                $birthdate = $faker->dateTimeBetween('-'.$rangeMax.' years', '-'.$rangeMin. 'years');
+                $player->addCategory($category);
+            }
+
+
+
+            $player->setFirstname($firstname);
+            $player->setLastname($lastname);
+            $player->setBirthdate($birthdate);
+
+            $entityManager->persist($player);
+        }
+
         $entityManager->flush();
 
         return $this->redirectToRoute('app_player_index', [], Response::HTTP_SEE_OTHER);
