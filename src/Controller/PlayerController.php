@@ -114,47 +114,51 @@ class PlayerController extends AbstractController
 
     #[Route('/player/generate', name: 'app_player_generate', methods: ['GET'])]
     public function generate(
-            PlayerRepository $playersRepository
-            , EntityManagerInterface $entityManager
-            , CategoryRepository $categoryRepository
+            PlayerRepository $playersRepository,
+            EntityManagerInterface $entityManager,
+            CategoryRepository $categoryRepository
         ): Response
     {
+        $categories = $categoryRepository->findAll();
+        $categoryIds = array_map(fn($category) => $category->getId(), $categories);
+        $categoryCount = count($categoryIds);
         
-        $categoryCount = $categoryRepository->count([]);
-
+        $faker = Factory::create('fr_FR');
+    
         for ($i = 0 ; $i < 300 ; $i++) {
             $player = new Player();
-            $faker = Factory::create('fr_FR');
             $firstname = $faker->firstname();
             $lastname = $faker->lastName();
-            $categoryId = rand(1, $categoryCount);
-
-            $category = $categoryRepository->findOneBy(['id'=>$categoryId]); 
-
-            if ($category === null) {
-                error_log("Group with ID $categoryId not found.");
-            } else {
-                error_log("Found group: " . $category->getTitle());
-                $title = $category->getTitle();
-                preg_match('/\d+/', $title, $matches);
-                $age = $matches[0];
-                $rangeMin = $age - 1;
-                $rangeMax = $age + 1;
-                $birthdate = $faker->dateTimeBetween('-'.$rangeMax.' years', '-'.$rangeMin. 'years');
-                $player->addCategory($category);
+            
+            if ($categoryCount > 0) {
+                $categoryId = $categoryIds[array_rand($categoryIds)];
+                $category = $categoryRepository->find($categoryId);
+    
+                if ($category !== null) {
+                    $title = $category->getTitle();
+                    if (preg_match('/\d+/', $title, $matches)) {
+                        $age = (int)$matches[0];
+                        $rangeMin = $age - 1;
+                        $rangeMax = $age + 1;
+                        $birthdate = $faker->dateTimeBetween('-'.$rangeMax.' years', '-'.$rangeMin. ' years');
+                        $player->setBirthdate($birthdate);
+                    }
+    
+                    $player->addCategory($category);
+                } else {
+                    error_log("Category with ID $categoryId not found.");
+                }
             }
-
-
-
+    
             $player->setFirstname($firstname);
             $player->setLastname($lastname);
-            $player->setBirthdate($birthdate);
-
+    
             $entityManager->persist($player);
         }
-
+    
         $entityManager->flush();
-
+    
         return $this->redirectToRoute('app_player_index', [], Response::HTTP_SEE_OTHER);
     }
+    
 }

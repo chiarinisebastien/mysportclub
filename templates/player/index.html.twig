@@ -29,6 +29,7 @@
             {% for team in item.category %}
                  <li>{{ team.title }}</li>
             {% endfor %}
+            <li>{{ item.birthdate | date("d/m/Y") }}</li>
          </ul>
     </div>
     <div class="cardLink text-end">
