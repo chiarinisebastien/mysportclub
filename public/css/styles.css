@@ -77,4 +77,8 @@ h1 {
         width: 100%; /* Les éléments occupent toute la largeur */
         margin: 10px 0; /* Ajoute de l'espace entre les éléments */
     }
+
+    .row {
+        width: 100%;
+    }
 }

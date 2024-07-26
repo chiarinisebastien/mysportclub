@@ -1,32 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User{% endblock %}
+{% block title %}Edit User{% endblock %}
 
 
 {% block stylesheet %}{% endblock %}
 
 
-
 {% block body %}
 
+<h1>Edit: {{ user.email }}</h1>
 
 
-
-
-
-<!-- Title -->
-User
-
-
-
-
-
-
-
-
-
-
-<!-- Content -->
 {% include "user/_submenu.html.twig" %}
 
 {{ include('user/_form.html.twig') }}
@@ -37,7 +21,23 @@ User
 
 
 
-
+{% if user.category %}
+<div class="row mt-3 ms-2" id="user-list">
+    <hr>
+    {% for item in user.category %}
+        <div class="card col-lg-2 m-1 p-0 col-sm-12 col-md-6 user-item">
+            <div class="card-header">{{ item.title }}</div>
+            <div class="card-body">
+                <ul>
+                    {% for player in item.players %}
+                        <li>{{ player.firstname }} {{ player.lastname }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
 
 
 

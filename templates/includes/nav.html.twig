@@ -1,56 +1,46 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark ps-5">
-  <a class="navbar-brand" href="{{ path('app_home') }}">
-    My Sport App
-  </a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+  <a class="navbar-brand" href="{{ path('app_home') }}">My Sport App</a>
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  
   <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav mr-auto">
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
       <li class="nav-item">
         <a class="nav-link" href="{{ path('app_home') }}">
-          <i class="fa-solid fa-house"></i>
-          Home
+          <i class="fa-solid fa-house"></i> Home
         </a>
       </li>
 
       {% if app.user %}
-      
         {% if 'ROLE_ADMIN' in app.user.roles %}
         <li class="nav-item">
           <a class="nav-link" href="{{ path('app_user_index') }}">
-            <i class="fa-solid fa-users"></i>
-            Users
+            <i class="fa-solid fa-users"></i> Users
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ path('app_category_index') }}">
-            <i class="fa-solid fa-table-list"></i>
-            Categories
+            <i class="fa-solid fa-table-list"></i> Categories
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ path('app_player_index') }}">
-            <i class="fa-solid fa-people-group"></i>
-            Players
+            <i class="fa-solid fa-people-group"></i> Players
           </a>
         </li>
         {% endif %}
-        
+
         {% if 'ROLE_COACH' in app.user.roles %}
         <li class="nav-item">
           <a class="nav-link" href="{{ path('app_player_index') }}">
-            <i class="fa-solid fa-people-group"></i>
-            My Players
+            <i class="fa-solid fa-users-viewfinder"></i> My Players
           </a>
         </li>
         {% endif %}
-        
+
         <li class="nav-item">
           <a class="nav-link" href="{{ path('app_logout') }}">
-            <i class="fa-solid fa-right-from-bracket"></i>
-            Logout
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
           </a>
         </li>
       {% endif %}
