@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Players{% endblock %}
+
+{% block stylesheet %}{% endblock %}
+
+{% block body %}
+<h1>Players</h1>
+
+{% for label, messages in app.flashes(['success', 'warning', 'error']) %}
+    {% for message in messages %}
+        <div class="alert alert-{{ label }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
+
+{% include "player/_submenu.html.twig" %}
+
+<div class="row mt-3 ms-2" id="item-list">
+    {% for item in categories %}
+        <div class="card col-lg-2 m-1 p-0 col-sm-12 col-md-6 list-item" data-category="{{ item.title }}">
+            <div class="card-header">{{ item.title }}</div>
+            <div class="card-body">
+                <ul class="player-list">
+                    {% for player in item.players %}
+                        <li class="player-item" data-firstname="{{ player.firstname }}" data-lastname="{{ player.lastname }}">
+                            {{ player.firstname }} {{ player.lastname }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    
+    function sortPlayers() {
+        const categories = document.querySelectorAll('.list-item');
+
+        categories.forEach(category => {
+            const playerList = category.querySelector('.player-list');
+            const players = Array.from(playerList.children);
+
+            players.sort((a, b) => {
+                const firstnameA = a.dataset.firstname.toLowerCase();
+                const lastnameA = a.dataset.lastname.toLowerCase();
+                const firstnameB = b.dataset.firstname.toLowerCase();
+                const lastnameB = b.dataset.lastname.toLowerCase();
+
+                if (firstnameA === firstnameB) {
+                    return lastnameA.localeCompare(lastnameB);
+                }
+                return firstnameA.localeCompare(firstnameB);
+            });
+
+            players.forEach(player => playerList.appendChild(player));
+        });
+    }
+
+    sortPlayers();
+
+    const searchInput = document.getElementById('search');
+    const itemList = document.getElementById('item-list');
+    const listItems = document.querySelectorAll('.list-item');
+
+    searchInput.addEventListener('keyup', function () {
+        const searchTerm = searchInput.value.toLowerCase();
+
+        listItems.forEach(function (item) {
+            const content = item.textContent.toLowerCase();
+
+            if (content.includes(searchTerm)) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,43 @@
+
+{% set currentPath = app.request.pathinfo %}
+
+    <div class="nav-wrapper">
+        <ul class="nav-menu">
+            <li>
+                <a href="{{ path('app_player_myplayer') }}">
+                    <i class="fa-solid fa-list"></i>
+                    <span class="nav-link-text">List</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('app_player_new') }}">
+                    <i class="fa-solid fa-plus-circle"></i>
+                    <span class="nav-link-text">New</span>
+                </a>
+            </li>
+            {% if 'ROLE_SUPER_ADMIN' in app.user.roles %}
+            <li>
+                <a href="{{ path('app_player_delete_all_player') }}">
+                    <i class="fa-solid fa-trash-can"></i>
+                    <span class="nav-link-text">Del. All</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('app_player_generate') }}">
+                    <i class="fa-solid fa-person-circle-plus"></i>
+                    <span class="nav-link-text">Gen.</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+
+    
+    {% if 'new' not in currentPath and 'edit' not in currentPath %} 
+    <div class="row">
+        <div class="search-container col-lg-3 col-sm-12 col-md-12">
+            <input class="form-control" type="text" id="search" placeholder="Search Player...">
+        </div>
+    </div>
+    {% else %}
+    {% endif %}
