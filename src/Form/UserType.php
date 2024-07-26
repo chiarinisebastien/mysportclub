@@ -3,9 +3,12 @@
 namespace App\Form;
 
 use App\Entity\User;
+use App\Entity\Category;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -29,7 +32,7 @@ class UserType extends AbstractType
             $isSuperAdmin = in_array('ROLE_SUPER_ADMIN', $currentUser->getRoles());
             $user = $options['data'];
         }
-        $submitLabel = $options['is_edit'] ? 'Edit' : 'Sign up';
+        $submitLabel = $options['is_edit'] ? 'Edit' : 'Add';
 
         $builder
             ->add('email', EmailType::class, [
@@ -37,7 +40,7 @@ class UserType extends AbstractType
                 'required' => true,
                 'attr' => [
                     'placeholder' => 'Mail Address',
-                    'class' => 'form-control'
+                    'class' => 'ms-2'
                 ]
             ])
             ->add('password', PasswordType::class, [
@@ -46,9 +49,27 @@ class UserType extends AbstractType
                 'empty_data' => 'Abc!-def123456789!',
                 'attr' => [
                     'placeholder' => 'Password ... ',
-                    'class' => 'form-control'
+                    'class' => 'ms-2'
                 ]
-            ]);
+            ])
+            ->add('category', EntityType::class, [
+                'class' => Category::class,
+                'choice_label' => function (Category $ent) {
+                    return $ent->getTitle();
+                },
+                'label' => 'Category',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('ent')
+                        ->orderBy('ent.title', 'ASC');
+                },
+                'attr' => [
+                    'class' => 'ms-2'
+                ],
+                'required' => true,
+                'expanded' => true,
+                'multiple' => true,
+            ])
+            ;
 
         if ($isSuperAdmin) {
             $builder->add('roles', ChoiceType::class, [

@@ -6,41 +6,44 @@
 
 {% block body %}
 
-{% include "/includes/body1.html.twig" %}
+<h1>User</h1>
 
-<!-- Title -->
-User
-
-{% include "/includes/body2.html.twig" %}
-
-<!-- Content -->
-{% include "user/_submenu.html.twig" %}
 
 {% for label, messages in app.flashes(['success', 'warning', 'error']) %}
-    {% for message in messages %}
-    <br><br>
-        <div class="alert alert-{{ label }}">
-            {{ message }}
-        </div>
-    {% endfor %}
+{% for message in messages %}
+<div class="alert alert-{{ label }}">
+    {{ message }}
+</div>
+{% endfor %}
 {% endfor %}
 
 
+{% include "user/_submenu.html.twig" %}
 
-<div class="row rowfor" id="user-list">
+<div class="row mt-3 ms-2" id="user-list">
 {% for item in users %}
-    <a class="col-lg-3 col-sm-12 colfor text-start user-item" href="{{ path('app_user_edit', {'id':item.id}) }}">
-        {{ item.email }}
+
+<div class="card col-lg-2 m-1 p-0 col-sm-12 col-md-6 user-item">
+    <div class="card-header">{{ item.email }}</div>
+    <div class="card-body">
         <ul>
-           {% for role in item.roles %}
-                <li>{{ role }}</li>
-           {% endfor %}
-        </ul>
-    </a>
+            {% for role in item.roles %}
+                 <li>{{ role }}</li>
+            {% endfor %}
+         </ul>
+    </div>
+    <div class="cardLink text-end">
+        {% if 'ROLE_ADMIN' in app.user.roles %}
+            <a class="btn btn-sm btn-info col-lg-5 col-sm-12 col-md-12 m-1" href="{{ path('app_user_edit', {'id':item.id}) }}">
+                <i class="fa-solid fa-user-pen"></i>
+                Edit
+            </a>
+        {% endif %}
+    </div>
+</div>
 {% endfor %}
 </div>
 
-{% include "/includes/body3.html.twig" %}
 
 {% endblock %}
 
