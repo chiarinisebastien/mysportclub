@@ -30,10 +30,17 @@ class Category
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'category')]
     private Collection $users;
 
+    /**
+     * @var Collection<int, Training>
+     */
+    #[ORM\OneToMany(targetEntity: Training::class, mappedBy: 'category')]
+    private Collection $trainings;
+
     public function __construct()
     {
         $this->players = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->trainings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -102,6 +109,36 @@ class Category
     {
         if ($this->users->removeElement($user)) {
             $user->removeCategory($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Training>
+     */
+    public function getTrainings(): Collection
+    {
+        return $this->trainings;
+    }
+
+    public function addTraining(Training $training): static
+    {
+        if (!$this->trainings->contains($training)) {
+            $this->trainings->add($training);
+            $training->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTraining(Training $training): static
+    {
+        if ($this->trainings->removeElement($training)) {
+            // set the owning side to null (unless already changed)
+            if ($training->getCategory() === $this) {
+                $training->setCategory(null);
+            }
         }
 
         return $this;
