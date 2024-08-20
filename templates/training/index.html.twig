@@ -1,35 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Training index{% endblock %}
+{% block title %}Trainings{% endblock %}
 
 {% block body %}
-    <h1>Training index</h1>
+<h1>Trainings</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>TrainingAt</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for training in trainings %}
-            <tr>
-                <td>{{ training.id }}</td>
-                <td>{{ training.trainingAt ? training.trainingAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_training_show', {'id': training.id}) }}">show</a>
-                    <a href="{{ path('app_training_edit', {'id': training.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
 
-    <a href="{{ path('app_training_new') }}">Create new</a>
+{% for label, messages in app.flashes(['success', 'warning', 'error']) %}
+{% for message in messages %}
+<div class="alert alert-{{ label }}">
+    {{ message }}
+</div>
+{% endfor %}
+{% endfor %}
+
+{% include "training/_submenu.html.twig" %}
+
+<div class="row m-1 p-1">
+    <div class="col-lg-1 col-sm-12 col-md-6 fw-bold">Category</div>
+    <div class="col-lg-2 col-sm-12 col-md-6 fw-bold">Date</div>
+    <div class="col-lg-1 col-sm-12 col-md-6 fw-bold">Hour</div>
+    <div class="col-lg-1 col-sm-12 col-md-6 fw-bold">Action</div>
+</div>
+
+{% for training in trainings %}
+<div class="row m-1 p-1">
+    <div class="col-lg-1 col-sm-12 col-md-6">{{ training.category.title }}</div>
+    <div class="col-lg-2 col-sm-12 col-md-6">{{ training.trainingAt | date("l d F Y") | capitalize }}</div>
+    <div class="col-lg-1 col-sm-12 col-md-6">{{ training.trainingHour | date("H:i") }}</div>
+    <div class="col-lg-1 col-sm-12 col-md-6">
+        <a class="btn btn-sm btn-info ps-2 pe-2 pt-0 pb-0" href="{{ path('app_training_edit', {'id':training.id}) }}"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
+    </div>
+</div>
+{% endfor %}
+
 {% endblock %}

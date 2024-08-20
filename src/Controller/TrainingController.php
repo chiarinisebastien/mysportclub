@@ -30,11 +30,40 @@ class TrainingController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // $entityManager->persist($training);
-            // $entityManager->flush();
-
+            $startedAt = $training->getStartedAt();
+            $endedAt = $training->getEndedAt();
+            $trainingDays = $training->getTrainingDay(); 
+            
+            $currentDate = clone $startedAt;
+            
+            while ($currentDate <= $endedAt) {
+                $dayOfWeek = (int)$currentDate->format('N'); 
+            
+                if (in_array($dayOfWeek, $trainingDays)) {
+                    $newTraining = new Training();
+                    $newTraining->setStartedAt($startedAt);
+                    $newTraining->setEndedAt($endedAt);
+        
+                    $trainingAtDate = clone $currentDate;
+                    $newTraining->setTrainingAt($trainingAtDate);
+                    
+                    $newTraining->setTrainingHour($training->getTrainingHour());
+                    $newTraining->setCategory($training->getCategory());
+                    $newTraining->setTrainingDay($training->getTrainingDay());
+            
+                    $entityManager->persist($newTraining);
+                }
+            
+                $currentDate->modify('+1 day');
+            }
+            
+            $entityManager->flush();
+            
             return $this->redirectToRoute('app_training_index', [], Response::HTTP_SEE_OTHER);
         }
+        
+        
+        
 
         return $this->render('training/new.html.twig', [
             'training' => $training,
@@ -53,7 +82,9 @@ class TrainingController extends AbstractController
     #[Route('/{id}/edit', name: 'app_training_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Training $training, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(TrainingType::class, $training);
+        $form = $this->createForm(TrainingType::class, $training, [
+            'is_edit' => true
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

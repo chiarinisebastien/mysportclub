@@ -83,7 +83,18 @@ class TrainingType extends AbstractType
                     'class' => 'ms-2',
                 ]
             ])
-        ;
+            ;
+
+            if ($options['is_edit'] ) {
+                $builder->add('trainingAt', DateType::class, [
+                    'label' => 'Training At',
+                    'widget' => 'single_text',
+                    'required' => true,
+                    'attr' => [
+                        'class' => 'ms-2',
+                    ],
+                ]);
+            }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
