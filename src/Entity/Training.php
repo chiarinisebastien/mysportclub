@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TrainingRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -31,6 +33,24 @@ class Training
 
     #[ORM\Column(type: Types::ARRAY)]
     private array $trainingDay = [];
+
+    /**
+     * @var Collection<int, TrainingAttendance>
+     */
+    #[ORM\OneToMany(targetEntity: TrainingAttendance::class, mappedBy: 'training')]
+    private Collection $player;
+
+    /**
+     * @var Collection<int, TrainingAttendance>
+     */
+    #[ORM\OneToMany(targetEntity: TrainingAttendance::class, mappedBy: 'training')]
+    private Collection $trainingAttendances;
+
+    public function __construct()
+    {
+        $this->player = new ArrayCollection();
+        $this->trainingAttendances = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -105,6 +125,66 @@ class Training
     public function setTrainingDay(array $trainingDay): static
     {
         $this->trainingDay = $trainingDay;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TrainingAttendance>
+     */
+    public function getPlayer(): Collection
+    {
+        return $this->player;
+    }
+
+    public function addPlayer(TrainingAttendance $player): static
+    {
+        if (!$this->player->contains($player)) {
+            $this->player->add($player);
+            $player->setTraining($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlayer(TrainingAttendance $player): static
+    {
+        if ($this->player->removeElement($player)) {
+            // set the owning side to null (unless already changed)
+            if ($player->getTraining() === $this) {
+                $player->setTraining(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TrainingAttendance>
+     */
+    public function getTrainingAttendances(): Collection
+    {
+        return $this->trainingAttendances;
+    }
+
+    public function addTrainingAttendance(TrainingAttendance $trainingAttendance): static
+    {
+        if (!$this->trainingAttendances->contains($trainingAttendance)) {
+            $this->trainingAttendances->add($trainingAttendance);
+            $trainingAttendance->setTraining($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTrainingAttendance(TrainingAttendance $trainingAttendance): static
+    {
+        if ($this->trainingAttendances->removeElement($trainingAttendance)) {
+            // set the owning side to null (unless already changed)
+            if ($trainingAttendance->getTraining() === $this) {
+                $trainingAttendance->setTraining(null);
+            }
+        }
 
         return $this;
     }

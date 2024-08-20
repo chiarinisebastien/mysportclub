@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\TrainingAttendanceRepository;
 use Faker\Factory;
 use App\Entity\Player;
 use App\Form\PlayerType;
@@ -12,6 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/player')]
@@ -39,7 +41,6 @@ class PlayerController extends AbstractController
     #[Route('/myaccount', name: 'app_player_myaccount', methods: ['GET'])]
     public function app_player_myaccount(
         PlayerRepository $playerRepository,
-        TrainingRepository $trainingRepository
     ): Response
     {
         $currentUser = $this->getUser();
@@ -191,6 +192,24 @@ class PlayerController extends AbstractController
         $entityManager->flush();
     
         return $this->redirectToRoute('app_player_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+
+    #[Route('/training/check/presence', name: 'app_training_check_presence', methods: ['POST'])]
+    public function app_training_check_presence(
+            Request $request,
+            TrainingAttendanceRepository $trainingAttendanceRepository
+        ): JsonResponse
+    {
+        $playerId = $request->request->get('playerId');
+        $trainingId = $request->request->get('trainingId');
+        $attendance = $trainingAttendanceRepository->findOneBy(['training'=>$trainingId, 'player'=>$playerId], ['id'=>'DESC']);
+
+        return new JsonResponse([
+            'hasResponded' => $attendance !== null,
+            'present' => $attendance ? $attendance->getPresent() : null,
+        ]);
+        
     }
     
 }

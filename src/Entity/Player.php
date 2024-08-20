@@ -37,10 +37,17 @@ class Player
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'player')]
     private Collection $users;
 
+    /**
+     * @var Collection<int, TrainingAttendance>
+     */
+    #[ORM\OneToMany(targetEntity: TrainingAttendance::class, mappedBy: 'player')]
+    private Collection $trainingAttendances;
+
     public function __construct()
     {
         $this->category = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->trainingAttendances = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -130,6 +137,36 @@ class Player
     {
         if ($this->users->removeElement($user)) {
             $user->removePlayer($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TrainingAttendance>
+     */
+    public function getTrainingAttendances(): Collection
+    {
+        return $this->trainingAttendances;
+    }
+
+    public function addTrainingAttendance(TrainingAttendance $trainingAttendance): static
+    {
+        if (!$this->trainingAttendances->contains($trainingAttendance)) {
+            $this->trainingAttendances->add($trainingAttendance);
+            $trainingAttendance->setPlayer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTrainingAttendance(TrainingAttendance $trainingAttendance): static
+    {
+        if ($this->trainingAttendances->removeElement($trainingAttendance)) {
+            // set the owning side to null (unless already changed)
+            if ($trainingAttendance->getPlayer() === $this) {
+                $trainingAttendance->setPlayer(null);
+            }
         }
 
         return $this;

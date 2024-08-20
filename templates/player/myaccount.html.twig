@@ -15,10 +15,12 @@
     {% endfor %}
 {% endfor %}
 
-
 <div class="row mt-3 ms-2" id="item-list">
     {% for player in players %}
-        <div class="card col-lg-2 m-1 p-0 col-sm-12 col-md-6 list-item">
+        {% set nextTraining = trainings[player.id] %}
+        <div class="card col-lg-2 m-1 p-0 col-sm-12 col-md-6 list-item" 
+             data-player-id="{{ player.id }}"
+             {% if nextTraining is not null %} data-training-id="{{ nextTraining.id }}"{% endif %}>
             <div class="card-header">{{ player.firstname }} {{ player.lastname }}</div>
             <div class="card-body">
                 {% if player.category %}
@@ -29,12 +31,17 @@
                     </ul>
                     <hr>
                 {% endif %}
-                {% set nextTraining = trainings[player.id] %}
                 {% if nextTraining %}
                     <p>
                         Next training entraînement : <br>
                         {{ nextTraining.category.title }} - {{ nextTraining.trainingAt|date('d/m/Y') }} {{ nextTraining.trainingHour|date('H:i') }} <br>
+                 
+                        <div class="row presentMessage"></div>
                         
+                        <div class="text-center">
+                            <a href="{{ path('app_training_attendance', {'playerId': player.id, 'present': 1, 'trainingId': nextTraining.id}) }}" class="btn btn-sm btn-success"><i class="fa-solid fa-thumbs-up"></i></a>
+                            <a href="{{ path('app_training_attendance', {'playerId': player.id, 'present': 0, 'trainingId': nextTraining.id}) }}" class="btn btn-sm btn-danger"><i class="fa-solid fa-thumbs-down"></i></a>
+                        </div>
                     </p>
                 {% else %}
                     <p>No training planned</p>
@@ -47,5 +54,46 @@
 {% endblock %}
 
 {% block javascripts %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#item-list .card').each(function() {
+            let card = $(this);
+            let playerId = card.data('player-id');
+            let trainingId = card.data('training-id');
 
+            if (typeof trainingId !== 'undefined') {
+                console.log('playerId:', playerId);
+                console.log('trainingId:', trainingId);
+
+                $.ajax({
+                    url: '{{ path('app_training_check_presence') }}',
+                    method: 'POST',
+                    data: {
+                        playerId: playerId,
+                        trainingId: trainingId
+                    },
+                    success: function(response) {
+                        let message = '';
+
+                        if (response.hasResponded) {
+                            if (response.present === 1) {
+                                message = '<p class="text-success text-center">I\'ll be there</p>';
+                            } else if (response.present === 0) {
+                                message = '<p class="text-danger text-center">I will not be present</p>';
+                            }
+                        } else {
+                            message = '<p class="text-warning text-center">No answer yet</p>';
+                        }
+
+                        card.find('.presentMessage').html(message);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error("Erreur lors de la vérification de la présence : ", textStatus, errorThrown);
+                    }
+                });
+            }
+        });
+    });
+</script>
 {% endblock %}

@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Player;
 use App\Entity\Training;
+use App\Entity\TrainingAttendance;
 use App\Form\TrainingType;
+use App\Repository\PlayerRepository;
 use App\Repository\TrainingRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -108,5 +111,25 @@ class TrainingController extends AbstractController
         }
 
         return $this->redirectToRoute('app_training_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{playerId}/{present}/{trainingId}', name: 'app_training_attendance', methods: ['GET'])]
+    public function app_training_attendance(
+        Player $playerId,
+        $present = 0,
+        Training $trainingId,
+        PlayerRepository $playerRepository,
+        TrainingRepository $trainingRepository,
+        EntityManagerInterface $entityManager
+        ): Response
+    {
+        $trainingAttendance = new TrainingAttendance();
+        $trainingAttendance->setPlayer($playerId);
+        $trainingAttendance->setTraining($trainingId);
+        $trainingAttendance->setPresent($present);
+        $entityManager->persist($trainingAttendance);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_player_myaccount', [], Response::HTTP_SEE_OTHER);
     }
 }
