@@ -2,16 +2,17 @@
 
 namespace App\Controller;
 
-use App\Entity\Player;
-use App\Repository\CategoryRepository;
 use Faker\Factory;
+use App\Entity\Player;
 use App\Form\PlayerType;
 use App\Repository\PlayerRepository;
+use App\Repository\CategoryRepository;
+use App\Repository\TrainingRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/player')]
 class PlayerController extends AbstractController
@@ -38,12 +39,20 @@ class PlayerController extends AbstractController
     #[Route('/myaccount', name: 'app_player_myaccount', methods: ['GET'])]
     public function app_player_myaccount(
         PlayerRepository $playerRepository,
-        ): Response
+        TrainingRepository $trainingRepository
+    ): Response
     {
         $currentUser = $this->getUser();
         $players = $currentUser->getPlayer();
+    
+        $trainings = [];
+        foreach ($players as $player) {
+            $trainings[$player->getId()] = $playerRepository->findNextTrainingForPlayer($player);
+        }
+    
         return $this->render('player/myaccount.html.twig', [
             'players' => $players,
+            'trainings' => $trainings,
         ]);
     }
 

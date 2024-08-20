@@ -22,17 +22,28 @@
             <div class="card-header">{{ player.firstname }} {{ player.lastname }}</div>
             <div class="card-body">
                 {% if player.category %}
-                <ul>
-                    {% for category in player.category %}
-                    <li>{{ category.title }}</li>    
-                    {% endfor %}
-                </ul>
-                <hr>
+                    <ul>
+                        {% for category in player.category %}
+                            <li>{{ category.title }}</li>
+                        {% endfor %}
+                    </ul>
+                    <hr>
+                {% endif %}
+                {% set nextTraining = trainings[player.id] %}
+                {% if nextTraining %}
+                    <p>
+                        Next training entraînement : <br>
+                        {{ nextTraining.category.title }} - {{ nextTraining.trainingAt|date('d/m/Y') }} {{ nextTraining.trainingHour|date('H:i') }} <br>
+                        
+                    </p>
+                {% else %}
+                    <p>No training planned</p>
                 {% endif %}
             </div>
         </div>
     {% endfor %}
 </div>
+
 {% endblock %}
 
 {% block javascripts %}

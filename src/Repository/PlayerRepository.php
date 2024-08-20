@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Player;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Entity\Training;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Player>
@@ -40,4 +41,24 @@ class PlayerRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+
+    public function findNextTrainingForPlayer(Player $player): ?Training
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->select('t')
+            ->from(Training::class, 't')
+            ->join('t.category', 'c')
+            ->where(':player MEMBER OF c.players')
+            ->andWhere('(t.trainingAt > :now OR (t.trainingAt = :today AND t.trainingHour > :currentHour))')
+            ->setParameter('player', $player)
+            ->setParameter('now', new \DateTime())
+            ->setParameter('today', (new \DateTime())->format('Y-m-d'))
+            ->setParameter('currentHour', (new \DateTime())->format('H:i:s'))
+            ->orderBy('t.trainingAt', 'ASC')
+            ->setMaxResults(1);
+    
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+    
 }
