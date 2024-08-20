@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Player;
 use App\Entity\User;
 use App\Entity\Category;
 use Doctrine\ORM\EntityRepository;
@@ -66,6 +67,23 @@ class UserType extends AbstractType
                     'class' => 'ms-2'
                 ],
                 'required' => true,
+                'expanded' => true,
+                'multiple' => true,
+            ])
+            ->add('player', EntityType::class, [
+                'class' => Player::class,
+                'choice_label' => function (Player $ent) {
+                    return $ent->getFirstname().' '.$ent->getLastname();
+                },
+                'label' => 'Children',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('ent')
+                        ->orderBy('ent.firstname', 'ASC');
+                },
+                'attr' => [
+                    'class' => 'ms-2'
+                ],
+                'required' => false,
                 'expanded' => true,
                 'multiple' => true,
             ])

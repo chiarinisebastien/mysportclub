@@ -38,6 +38,14 @@
         </li>
         {% endif %}
 
+        {% if 'ROLE_PARENT' in app.user.roles or 'ROLE_PLAYER' in app.user.roles %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ path('app_player_myaccount') }}">
+            <i class="fa-solid fa-people-roof"></i> My account(s)
+          </a>
+        </li>
+        {% endif %}
+
         <li class="nav-item">
           <a class="nav-link" href="{{ path('app_logout') }}">
             <i class="fa-solid fa-right-from-bracket"></i> Logout

@@ -39,9 +39,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'users')]
     private Collection $category;
 
+    /**
+     * @var Collection<int, Player>
+     */
+    #[ORM\ManyToMany(targetEntity: Player::class, inversedBy: 'users')]
+    private Collection $player;
+
     public function __construct()
     {
         $this->category = new ArrayCollection();
+        $this->player = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -139,6 +146,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeCategory(Category $category): static
     {
         $this->category->removeElement($category);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Player>
+     */
+    public function getPlayer(): Collection
+    {
+        return $this->player;
+    }
+
+    public function addPlayer(Player $player): static
+    {
+        if (!$this->player->contains($player)) {
+            $this->player->add($player);
+        }
+
+        return $this;
+    }
+
+    public function removePlayer(Player $player): static
+    {
+        $this->player->removeElement($player);
 
         return $this;
     }

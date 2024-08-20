@@ -36,6 +36,7 @@ security:
     access_control:
         - { path: ^/category, roles: ROLE_ADMIN }
         - { path: ^/player/myplayer, roles: [ROLE_COACH, ROLE_ADMIN] }
+        - { path: ^/player/myaccount, roles: [ROLE_PARENT, ROLE_PLAYER] }
         - { path: ^/player, roles: ROLE_ADMIN }
         - { path: ^/user, roles: [ROLE_SUPER_ADMIN ,ROLE_ADMIN] }
         # - { path: ^/profile, roles: ROLE_USER }

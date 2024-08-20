@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Players{% endblock %}
+
+{% block stylesheet %}{% endblock %}
+
+{% block body %}
+<h1>My account(s)</h1>
+
+{% for label, messages in app.flashes(['success', 'warning', 'error']) %}
+    {% for message in messages %}
+        <div class="alert alert-{{ label }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
+
+
+<div class="row mt-3 ms-2" id="item-list">
+    {% for player in players %}
+        <div class="card col-lg-2 m-1 p-0 col-sm-12 col-md-6 list-item">
+            <div class="card-header">{{ player.firstname }} {{ player.lastname }}</div>
+            <div class="card-body">
+                {% if player.category %}
+                <ul>
+                    {% for category in player.category %}
+                    <li>{{ category.title }}</li>    
+                    {% endfor %}
+                </ul>
+                <hr>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block javascripts %}
+
+{% endblock %}

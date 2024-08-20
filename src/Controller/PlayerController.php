@@ -26,14 +26,24 @@ class PlayerController extends AbstractController
 
     #[Route('/myplayer', name: 'app_player_myplayer', methods: ['GET'])]
     public function app_player_myplayer(
-        PlayerRepository $playerRepository,
-        CategoryRepository $categoryRepository
         ): Response
     {
         $currentUser = $this->getUser();
         $categories = $currentUser->getCategory();
         return $this->render('player/myplayer.html.twig', [
             'categories' => $categories,
+        ]);
+    }
+
+    #[Route('/myaccount', name: 'app_player_myaccount', methods: ['GET'])]
+    public function app_player_myaccount(
+        PlayerRepository $playerRepository,
+        ): Response
+    {
+        $currentUser = $this->getUser();
+        $players = $currentUser->getPlayer();
+        return $this->render('player/myaccount.html.twig', [
+            'players' => $players,
         ]);
     }
 
