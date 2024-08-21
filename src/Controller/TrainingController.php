@@ -17,11 +17,14 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/training')]
 class TrainingController extends AbstractController
 {
+
     #[Route('/', name: 'app_training_index', methods: ['GET'])]
     public function index(TrainingRepository $trainingRepository): Response
     {
+        $user = $this->getUser(); 
+        $trainings = $trainingRepository->findByUserCategories($user);
         return $this->render('training/index.html.twig', [
-            'trainings' => $trainingRepository->findAll(),
+            'trainings' => $trainings,
         ]);
     }
 

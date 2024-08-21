@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Training;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Training>
@@ -40,4 +41,15 @@ class TrainingRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findByUserCategories(User $user)
+    {
+        return $this->createQueryBuilder('t')
+            ->join('t.category', 'c')
+            ->where(':user MEMBER OF c.users')
+            ->setParameter('user', $user)
+            ->orderBy('t.trainingAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }
