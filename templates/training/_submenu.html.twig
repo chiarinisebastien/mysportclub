@@ -5,7 +5,7 @@
             <li>
                 <a href="{{ path('app_training_index') }}">
                     <i class="fa-solid fa-list"></i>
-                    <span class="nav-link-text">List</span>
+                    <span class="nav-link-text">All</span>
                 </a>
             </li>
             <li>
@@ -14,6 +14,25 @@
                     <span class="nav-link-text">New</span>
                 </a>
             </li>
+
+            {% for category in categories %}
+            <li>
+                <a href="{{ path('app_training_category', {'category':category.id}) }}">
+                    <i class="fa-solid fa-futbol"></i>
+                    <span class="nav-link-text">{{ category.title }}</span>
+                </a>
+            </li>
+            {% endfor %}
+            
+            {% if 'ROLE_SUPER_ADMIN' in app.user.roles %}
+            <li>
+                <a href="{{ path('app_training_delete_all_training') }}">
+                    <i class="fa-solid fa-trash-can"></i>
+                    <span class="nav-link-text">Del. All</span>
+                </a>
+            </li>
+            {% endif %}
+
         </ul>
     </div>
 

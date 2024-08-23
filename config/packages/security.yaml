@@ -35,6 +35,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/category, roles: ROLE_ADMIN }
+        - { path: ^/cheat, roles: ROLE_SUPER_ADMIN }
         - { path: ^/player/myplayer, roles: [ROLE_COACH, ROLE_ADMIN] }
         - { path: ^/player/myaccount, roles: [ROLE_PARENT, ROLE_PLAYER] }
         - { path: ^/player, roles: ROLE_ADMIN }

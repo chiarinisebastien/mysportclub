@@ -59,8 +59,12 @@ class TrainingAttendance
 
     public function setPresent(int $present): static
     {
+        if (!in_array($present, [-1, 0, 1])) {
+            throw new \InvalidArgumentException('Invalid value for presence');
+        }
         $this->present = $present;
-
+    
         return $this;
     }
+    
 }

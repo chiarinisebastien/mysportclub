@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Cheat{% endblock %}
+
+{% block body %}
+    <h1>Create new Cheat</h1>
+
+    {{ include('cheat/_form.html.twig') }}
+
+    <a href="{{ path('app_cheat_index') }}">back to list</a>
+{% endblock %}

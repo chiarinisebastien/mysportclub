@@ -16,4 +16,12 @@ class HomeController extends AbstractController
             'controller_name' => 'HomeController',
         ]);
     }
+
+    #[Route('/log/cheater', name: 'app_cheater')]
+    public function cheater(): Response
+    {
+        return $this->render('home/cheater.html.twig', [
+            'controller_name' => 'HomeController',
+        ]);
+    }
 }

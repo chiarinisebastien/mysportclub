@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use DateTime;
 use App\Entity\User;
+use App\Entity\Category;
 use App\Entity\Training;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -48,8 +50,24 @@ class TrainingRepository extends ServiceEntityRepository
             ->join('t.category', 'c')
             ->where(':user MEMBER OF c.users')
             ->setParameter('user', $user)
-            ->orderBy('t.trainingAt', 'DESC')
+            ->orderBy('t.trainingAt', 'ASC')
             ->getQuery()
             ->getResult();
     }
+
+    public function findNextTrainingByCategory(Category $category): ?Training
+    {
+        $today = (new DateTime())->setTime(0, 0, 0);
+        
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.category = :category')
+            ->andWhere('t.trainingAt >= :today')
+            ->setParameter('category', $category)
+            ->setParameter('today', $today)
+            ->orderBy('t.trainingAt', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+    
 }

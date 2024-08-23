@@ -135,13 +135,19 @@ class PlayerController extends AbstractController
         $players = $playerRepository->findAll();
 
         foreach ($players as $player) {
+            foreach ($player->getTrainingAttendances() as $attendance) {
+                $entityManager->remove($attendance);
+            }
+    
             foreach ($player->getCategory() as $category) {
                 $player->removeCategory($category);
             }
+    
             $entityManager->remove($player);
         }
+    
         $entityManager->flush();
-
+    
         return $this->redirectToRoute('app_player_index', [], Response::HTTP_SEE_OTHER);
     }
 

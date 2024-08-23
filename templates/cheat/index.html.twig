@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cheat index{% endblock %}
+
+{% block body %}
+    <h1>Cheat index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>CheatAt</th>
+                <th>User</th>
+                <th>Message</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cheat in cheats %}
+            <tr>
+                <td>{{ cheat.id }}</td>
+                <td>{{ cheat.cheatAt ? cheat.cheatAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ cheat.user.email }}</td>
+                <td>{{ cheat.message }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
