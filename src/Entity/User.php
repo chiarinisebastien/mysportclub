@@ -45,10 +45,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Player::class, inversedBy: 'users')]
     private Collection $player;
 
+    /**
+     * @var Collection<int, Cheat>
+     */
+    #[ORM\OneToMany(targetEntity: Cheat::class, mappedBy: 'user')]
+    private Collection $cheats;
+
     public function __construct()
     {
         $this->category = new ArrayCollection();
         $this->player = new ArrayCollection();
+        $this->cheats = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -170,6 +177,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removePlayer(Player $player): static
     {
         $this->player->removeElement($player);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Cheat>
+     */
+    public function getCheats(): Collection
+    {
+        return $this->cheats;
+    }
+
+    public function addCheat(Cheat $cheat): static
+    {
+        if (!$this->cheats->contains($cheat)) {
+            $this->cheats->add($cheat);
+            $cheat->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCheat(Cheat $cheat): static
+    {
+        if ($this->cheats->removeElement($cheat)) {
+            // set the owning side to null (unless already changed)
+            if ($cheat->getUser() === $this) {
+                $cheat->setUser(null);
+            }
+        }
 
         return $this;
     }

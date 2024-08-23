@@ -2,23 +2,22 @@
 
 namespace App\Repository;
 
-use App\Entity\User;
-use App\Entity\Category;
-use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Cheat;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Category>
+ * @extends ServiceEntityRepository<Cheat>
  */
-class CategoryRepository extends ServiceEntityRepository
+class CheatRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Category::class);
+        parent::__construct($registry, Cheat::class);
     }
 
     //    /**
-    //     * @return Category[] Returns an array of Category objects
+    //     * @return Cheat[] Returns an array of Cheat objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -32,7 +31,7 @@ class CategoryRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Category
+    //    public function findOneBySomeField($value): ?Cheat
     //    {
     //        return $this->createQueryBuilder('c')
     //            ->andWhere('c.exampleField = :val')
@@ -41,14 +40,4 @@ class CategoryRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
-
-    public function findByUser(User $user): array
-    {
-        return $this->createQueryBuilder('c')
-            ->innerJoin('c.users', 'u')
-            ->where('u.id = :userId')
-            ->setParameter('userId', $user->getId())
-            ->getQuery()
-            ->getResult();
-    }
 }

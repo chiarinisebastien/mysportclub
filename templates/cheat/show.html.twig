@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cheat{% endblock %}
+
+{% block body %}
+    <h1>Cheat</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ cheat.id }}</td>
+            </tr>
+            <tr>
+                <th>CheatAt</th>
+                <td>{{ cheat.cheatAt ? cheat.cheatAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Message</th>
+                <td>{{ cheat.message }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_cheat_index') }}">back to list</a>
+
+    <a href="{{ path('app_cheat_edit', {'id': cheat.id}) }}">edit</a>
+
+    {{ include('cheat/_delete_form.html.twig') }}
+{% endblock %}

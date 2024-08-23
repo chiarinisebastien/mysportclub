@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Cheat{% endblock %}
+
+{% block body %}
+    <h1>Edit Cheat</h1>
+
+    {{ include('cheat/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_cheat_index') }}">back to list</a>
+
+    {{ include('cheat/_delete_form.html.twig') }}
+{% endblock %}

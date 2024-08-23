@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Form;
 
 use App\Entity\Category;
@@ -13,11 +12,20 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Security\Core\Security;
 
 class TrainingType extends AbstractType
 {
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $user = $this->security->getUser(); // Récupération de l'utilisateur connecté
         
         $submitLabel = $options['is_edit'] ? 'Edit' : 'Add';
 
@@ -44,8 +52,10 @@ class TrainingType extends AbstractType
                     return $ent->getTitle();
                 },
                 'label' => 'Category',
-                'query_builder' => function (EntityRepository $er) {
+                'query_builder' => function (EntityRepository $er) use ($user) {
                     return $er->createQueryBuilder('ent')
+                        ->where(':user MEMBER OF ent.users')
+                        ->setParameter('user', $user)
                         ->orderBy('ent.title', 'ASC');
                 },
                 'attr' => [
@@ -85,7 +95,7 @@ class TrainingType extends AbstractType
             ])
             ;
 
-            if ($options['is_edit'] ) {
+            if ($options['is_edit']) {
                 $builder->add('trainingAt', DateType::class, [
                     'label' => 'Training At',
                     'widget' => 'single_text',

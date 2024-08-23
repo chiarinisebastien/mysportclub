@@ -3,7 +3,7 @@
 {% block title %}Trainings{% endblock %}
 
 {% block body %}
-<h1>Trainings</h1>
+<h1>{{ title }}</h1>
 
 
 {% for label, messages in app.flashes(['success', 'warning', 'error']) %}
@@ -16,22 +16,62 @@
 
 {% include "training/_submenu.html.twig" %}
 
+<div class="row">
+    {% if nextTraining %}
+    <div class="col-lg-6">
+        <div class="row m-1 p-1">
+            <div class="col-lg-6 col-sm-12 col-md-6 fw-bold">{{ nextTraining.trainingAt | date("l d F Y") | capitalize }} - {{ nextTraining.trainingHour | date("H:i") }}</div>
+        </div>
+        {% for player in players %}
+        <div class="row m-1 p-1">
+            <div class="col-lg-6 col-sm-12 col-md-6">
+                {% set classPresent = 'secondary' %}
+                {% set playerStatus = 'Non répondu' %}
+                {% if player.present == 1 %}
+                    {% set classPresent = 'success' %}
+                    {% set playerStatus = 'Present' %}
+                {% elseif player.present == 0 %}
+                    {% set classPresent = 'danger' %}
+                    {% set playerStatus = 'Absent' %}
+                {% elseif player.present == -1 %}
+                    {% set classPresent = 'warning' %}
+                    {% set playerStatus = 'Not answer yet' %}
+                {% endif %}
+                <div class="alert alert-{{ classPresent }} p-2 m-1">
+                    {{ player.player.firstname }} {{ player.player.lastname }} - {{ playerStatus }}
+                </div>
+                
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+{% if nextTraining %}
+<div class="col-lg-6">
+{% endif %}
 <div class="row m-1 p-1">
-    <div class="col-lg-1 col-sm-12 col-md-6 fw-bold">Category</div>
-    <div class="col-lg-2 col-sm-12 col-md-6 fw-bold">Date</div>
-    <div class="col-lg-1 col-sm-12 col-md-6 fw-bold">Hour</div>
-    <div class="col-lg-1 col-sm-12 col-md-6 fw-bold">Action</div>
+    <div class="col-lg-2 col-sm-12 col-md-6 fw-bold">Category</div>
+    <div class="col-lg-4 col-sm-12 col-md-6 fw-bold">Date</div>
+    <div class="col-lg-2 col-sm-12 col-md-6 fw-bold">Hour</div>
+    <div class="col-lg-2 col-sm-12 col-md-6 fw-bold">Action</div>
 </div>
 
+
 {% for training in trainings %}
-<div class="row m-1 p-1">
-    <div class="col-lg-1 col-sm-12 col-md-6">{{ training.category.title }}</div>
-    <div class="col-lg-2 col-sm-12 col-md-6">{{ training.trainingAt | date("l d F Y") | capitalize }}</div>
-    <div class="col-lg-1 col-sm-12 col-md-6">{{ training.trainingHour | date("H:i") }}</div>
-    <div class="col-lg-1 col-sm-12 col-md-6">
+<div class="row">
+    <div class="col-lg-2 col-sm-12 col-md-6">{{ training.category.title }}</div>
+    <div class="col-lg-4 col-sm-12 col-md-6">{{ training.trainingAt | date("l d F Y") | capitalize }}</div>
+    <div class="col-lg-2 col-sm-12 col-md-6">{{ training.trainingHour | date("H:i") }}</div>
+    <div class="col-lg-2 col-sm-12 col-md-6">
         <a class="btn btn-sm btn-info ps-2 pe-2 pt-0 pb-0" href="{{ path('app_training_edit', {'id':training.id}) }}"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
     </div>
 </div>
-{% endfor %}
+    {% endfor %}
 
+{% if nextTraining %}
+</div>
+{% endif %}
+
+</div>
 {% endblock %}

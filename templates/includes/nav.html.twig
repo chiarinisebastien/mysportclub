@@ -12,6 +12,14 @@
       </li>
 
       {% if app.user %}
+        {% if 'ROLE_SUPER_ADMIN' in app.user.roles %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ path('app_cheat_index') }}">
+            <i class="fa-solid fa-users"></i> Cheat
+          </a>
+        </li>
+        {% endif %}
+
         {% if 'ROLE_ADMIN' in app.user.roles %}
         <li class="nav-item">
           <a class="nav-link" href="{{ path('app_user_index') }}">
