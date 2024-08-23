@@ -213,6 +213,18 @@ class TrainingController extends AbstractController
         TrainingAttendanceRepository $trainingAttendanceRepository
         ): Response
     {
+        $controlUser = $playerId->getUsers()->toArray();
+        $currentUser = $this->getUser();
+        
+        if (!in_array($currentUser, $controlUser)) {
+            $cheat = new Cheat();
+            $cheat->setUser($currentUser);
+            $cheat->SetMessage('Attempts to change the presence of a player to whom he does not have access');
+            $entityManager->persist($cheat);
+            $entityManager->flush();
+            return $this->redirectToRoute('app_cheater', [], Response::HTTP_SEE_OTHER);
+        }
+
         $previousAttendance = $trainingAttendanceRepository->findBy(['training'=>$trainingId, 'player'=>$playerId]);
         if ($previousAttendance) {
             foreach ($previousAttendance as $attendance) {
